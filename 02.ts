@@ -1,3 +1,24 @@
+interface IProduct {
+  name: string;
+  price: number;
+}
+
+interface IShipableProduct extends IProduct {
+  weight: number;
+}
+
+interface IDownloadProduct extends IProduct {
+  file: string;
+}
+
+class DownloadProduct implements IDownloadProduct {
+  constructor(public name: string, public price: number, public file: string) {}
+}
+
+class ShipableProduct implements IShipableProduct {
+  constructor(public name: string, public price: number, public weight: number) {}
+}
+
 /**
 *
 */
@@ -31,10 +52,11 @@ function isDownloadProduct(arg: IDownloadProduct | IShipableProduct): arg is IDo
   return (arg as IDownloadProduct).file !== undefined;
 }
 
-function productFactory(product) {
+function productFactory(product: IDownloadProduct | IShipableProduct): DownloadProduct | ShipableProduct {
 	if (isDownloadProduct(product)) {
-		new DownloadProduct(product)
+	  return new DownloadProduct(product.name, product.price, product.file);
 	} else {
-		new ShipableProduct(product)
+	  return new ShipableProduct(product.name, product.price, product.weight);
 	}
-}
+  }
+  
